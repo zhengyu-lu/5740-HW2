@@ -1,0 +1,90 @@
+---
+title: "HW2"
+author: "Zhengyu Lu"
+date: '2022-09-23'
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+## HW2 Question2
+
+### (a)Fit a multiple regression model to predict Sales using Price, Urban, and US.
+```{r}
+library(ISLR)
+attach(Carseats)
+contrasts(Urban)
+contrasts(US)
+head(Carseats)
+lm.fit <- lm(Sales~Price+Urban+US, data=Carseats)
+summary(lm.fit)
+```
+### (b) Provide an interpretation of each coeffcient in the model. Be carefulsome of the variables in the model are qualitative!
+If all other variables are constant, for a one unit increase in the price, the sales of car decreases by 0.054459 unit.
+
+If all other variables are constant, and if the location is in urban region, the sales of car decreases by 0.021916 unit. However, this relationship is not statistically significant.
+
+If all other variables are constant, and if the location is in US is Yes, the sales of car increases by 1.200573.
+
+### (c) Write out the model in equation form, being careful to handle the qualitative variables properly.
+Y=13.04-0.05*Price-0.02*UrbanYes+1.2*USYes
+
+### (d) For which of the predictors can you reject the null hypothesis H0 : βj = 0? Use the significance level 0.05 for the hypothesis test.
+For variables Price and and US, we can reject the null hypotheses because the p-value are less than 0.05. The p-value of Urban is 0.936 which is much greater than 0.05, so we can not reject the null hypotheses.
+
+### (e) On the basis of your response to question (d), fit a smaller model that only uses the predictors for which there is evidence of association with the outcome.
+```{r}
+lm.fit2 <- lm(Sales~Price+US, data=Carseats)
+summary(lm.fit2)
+```
+### (f) What are the values of R squared for models in (a) and (e)? Does larger R squared mean that it is a better model?
+The multiple R squared and adjusted R squared for (a) are 0.2393, 0.2335; For (e), they are 0.2393, 0.2354. These R squared means that only about 23.93% of the Sales variabels can be explained by Price, US, (Urban).
+
+Larger R squared does not mean that it is a better model because it favors a more flexible model, which can be overfitted and is not a good model.
+
+### (g) Using the model from (e), obtain 95 % confidence intervals for the coeficient(s).
+```{r}
+confint(lm.fit2)
+```
+
+### (h) Fit linear regression models in (e) with interaction effects. Provide an interpretation of each coefficient in the model.
+```{r}
+lm.fit3 <- lm(Sales~Price*US, data=Carseats)
+summary(lm.fit3)
+```
+If all other variables are constant, for a one unit increase in the price, the sales of car decreases by 0.053986 unit.
+
+If all other variables are constant, and if the variable US is Yes, the sales of car increases by 1.295775. However, this relationship is not statistically significant.
+
+Keep the price constant, the effect on Sales of a one unit increase in price is 0.000835 less for those locations which are in US  versus those which are not
+
+## HW Question 4(a)
+```{r}
+vec=1:100
+for(i in 1:100){x1 <- rnorm(500,30,9)
+error=rnorm(500,0,16)
+y1=10*x1+error
+m1=lm(x1~y1-1)
+k <- coefficients(m1)
+vec[i]<-k}
+print(vec)
+mean(vec)
+
+```
+
+According to the result, I think the coefficient estimate for the regression of x onto y is a good estimate of 1=β in the model because the mean of the 100 estimates is very close to 1/10.
+
+### HW Question 4(a) Different setting
+```{r}
+vec=1:100
+for(i in 1:100){x2 <- rnorm(500,80,120)
+error2=rnorm(500,0,32)
+y2=35*x2+error2
+m2=lm(x2~y2-1)
+k2 <- coefficients(m2)
+vec[i]<-k2}
+print(vec)
+mean(vec)
+```
+
+The mean of the 100 estimates is also very close to 1/35.
